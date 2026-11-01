@@ -354,7 +354,7 @@ function MonologuePhase({
     let emptyRuns = 0;
     while (Date.now() - recStart.current < 95000 && recStart.current > 0) {
       const r = await listenOnce({ timeoutMs: 20000 });
-      if (r?.transcript) {
+      if (r.transcript) {
         emptyRuns = 0;
         pieces.current.push(r.transcript);
         setTranscript(pieces.current.join(' '));

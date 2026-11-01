@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { speak, stopSpeak, listenOnce, isTtsSupported, isSttSupported } from '../engine/speech';
+import { speak, stopSpeak, listenOnce, isTtsSupported, isSttSupported, sttErrorText } from '../engine/speech';
 
 // Кнопка озвучки (TTS)
 export function SpeakButton({ text, slow = false, small = false }: { text: string; slow?: boolean; small?: boolean }) {
@@ -35,23 +35,33 @@ export function MicButton({
   lang?: string;
 }) {
   const [listening, setListening] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   if (!isSttSupported) {
-    return <span className="text-xs text-slate-400">Распознавание речи не поддерживается в этом браузере — введите текст</span>;
+    return <span className="text-xs text-slate-400">Распознавание речи работает в Chrome/Edge — введите текст</span>;
   }
   return (
-    <button
-      onClick={async () => {
-        if (listening) return;
-        setListening(true);
-        const r = await listenOnce({ lang, timeoutMs: 15000 });
-        setListening(false);
-        onResult(r?.transcript ?? null, r?.confidence ?? 0);
-      }}
-      className={`inline-flex items-center gap-2 rounded-full px-4 py-2 font-semibold text-sm transition-colors ${
-        listening ? 'bg-rose-600 text-white recording' : 'bg-rose-100 text-rose-700 active:bg-rose-200'
-      }`}
-    >
-      🎤 {listening ? 'Слушаю…' : 'Говорить'}
-    </button>
+    <span className="inline-flex flex-col gap-1">
+      <button
+        onClick={async () => {
+          if (listening) return;
+          setListening(true);
+          setError(null);
+          const r = await listenOnce({ lang, timeoutMs: 15000 });
+          setListening(false);
+          if (r.transcript) {
+            onResult(r.transcript, r.confidence ?? 0);
+          } else {
+            setError(sttErrorText(r.error));
+            onResult(null, 0);
+          }
+        }}
+        className={`inline-flex items-center gap-2 rounded-full px-4 py-2 font-semibold text-sm transition-colors ${
+          listening ? 'bg-rose-600 text-white recording' : 'bg-rose-100 text-rose-700 active:bg-rose-200'
+        }`}
+      >
+        🎤 {listening ? 'Слушаю…' : 'Говорить'}
+      </button>
+      {error && <span className="text-xs text-rose-600">{error}</span>}
+    </span>
   );
 }

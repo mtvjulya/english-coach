@@ -1,6 +1,6 @@
 // Обёртки над бесплатным Web Speech API (TTS + STT)
 
-type RecogResult = { transcript: string; confidence: number };
+type RecogResult = { transcript: string; confidence: number; error?: string };
 
 interface SR extends EventTarget {
   lang: string;
@@ -66,12 +66,12 @@ export function stopSpeak(): void {
   if (isTtsSupported) window.speechSynthesis.cancel();
 }
 
-// Одноразовое прослушивание. resolve(null) если недоступно/отменено.
-export function listenOnce(opts: { lang?: string; timeoutMs?: number } = {}): Promise<RecogResult | null> {
+// Одноразовое прослушивание. Всегда резолвится: при неудаче transcript='' и error с причиной.
+export function listenOnce(opts: { lang?: string; timeoutMs?: number } = {}): Promise<RecogResult> {
   return new Promise((resolve) => {
     const Ctor = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!Ctor) {
-      resolve(null);
+      resolve({ transcript: '', confidence: 0, error: 'unsupported' });
       return;
     }
     const rec = new Ctor();
@@ -79,7 +79,7 @@ export function listenOnce(opts: { lang?: string; timeoutMs?: number } = {}): Pr
     rec.interimResults = false;
     rec.maxAlternatives = 1;
     let done = false;
-    const finish = (r: RecogResult | null) => {
+    const finish = (r: RecogResult | null, error?: string) => {
       if (done) return;
       done = true;
       try {
@@ -87,30 +87,46 @@ export function listenOnce(opts: { lang?: string; timeoutMs?: number } = {}): Pr
       } catch {
         /* noop */
       }
-      resolve(r);
+      resolve(r ?? { transcript: '', confidence: 0, error: error ?? 'no-speech' });
     };
-    const timer = setTimeout(() => finish(null), opts.timeoutMs ?? 12000);
+    const timer = setTimeout(() => finish(null, 'timeout'), opts.timeoutMs ?? 12000);
     rec.onresult = (e: any) => {
       clearTimeout(timer);
       const alt = e.results?.[0]?.[0];
-      finish(alt ? { transcript: alt.transcript as string, confidence: alt.confidence ?? 0 } : null);
+      finish(alt ? { transcript: alt.transcript as string, confidence: alt.confidence ?? 0 } : null, 'no-speech');
     };
-    rec.onerror = () => {
+    rec.onerror = (e: any) => {
       clearTimeout(timer);
-      finish(null);
+      finish(null, (e?.error as string) ?? 'error');
     };
     rec.onend = () => {
       clearTimeout(timer);
-      finish(null);
+      finish(null, 'no-speech');
     };
     try {
       rec.start();
     } catch {
       clearTimeout(timer);
-      finish(null);
+      finish(null, 'start-failed');
     }
   });
 }
+
+// Человекочитаемые причины сбоя STT
+export const STT_ERROR_RU: Record<string, string> = {
+  'not-allowed': 'Нет доступа к микрофону — разрешите его в браузере',
+  'service-not-allowed': 'Распознавание заблокировано — попробуйте Chrome/Edge напрямую, не во встроенном окне',
+  'audio-capture': 'Микрофон не найден — проверьте подключение',
+  'no-speech': 'Не расслышал — говорите чётче и попробуйте ещё раз',
+  network: 'Для распознавания речи нужен интернет',
+  timeout: 'Время вышло — попробуйте ещё раз',
+  aborted: 'Прослушивание прервано',
+  unsupported: 'Распознавание речи не поддерживается в этом браузере',
+  'start-failed': 'Не удалось запустить распознавание — попробуйте ещё раз',
+};
+
+export const sttErrorText = (code?: string): string =>
+  STT_ERROR_RU[code ?? ''] ?? 'Не удалось распознать речь — попробуйте ещё раз или введите текст';
 
 // Оценка произношения: совпадение распознанного текста с эталоном.
 // Честно: Web Speech API не оценивает акцент — показываем только распознавание слов.
