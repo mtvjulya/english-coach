@@ -97,7 +97,7 @@ export default function Flashcards() {
                 <div className="flex flex-wrap gap-1.5">
                   {w.collocations.map((c, i) => (
                     <span key={i} className="text-xs bg-brand-50 text-brand-700 rounded-full px-2 py-1">
-                      {c}
+                      {c.en} <span className="text-slate-500">— {c.ru}</span>
                     </span>
                   ))}
                 </div>

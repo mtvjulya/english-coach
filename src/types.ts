@@ -140,7 +140,7 @@ export interface VocabWord {
   transcription?: string;
   example: string;
   exampleRu: string;
-  collocations?: string[];
+  collocations?: { en: string; ru: string }[];
   plural?: string;
   forms?: [string, string, string]; // go–went–gone
   alt?: { ru: string; example: string; exampleRu: string }[];
