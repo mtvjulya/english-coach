@@ -7,9 +7,54 @@ import type { ChatTurn, UtteranceFeedback } from '../../engine/ai/types';
 import { Card, Button, ProgressBar, Tag, VerdictBadge } from '../../components/ui';
 import { SpeakButton, MicButton } from '../../components/Audio';
 import { tokens } from '../../engine/checker';
-import { listenOnce, isSttSupported } from '../../engine/speech';
+import { listenOnce, isSttSupported, isTtsSupported, speak, stopSpeak } from '../../engine/speech';
 
 type Phase = 'listen' | 'comprehension' | 'dialogue' | 'monologue' | 'done';
+
+// Последовательное воспроизведение списка реплик с подсветкой текущей и возможностью стопа
+function useSequencePlayer() {
+  const [idx, setIdx] = useState<number | null>(null);
+  const active = useRef(false);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const stop = () => {
+    active.current = false;
+    if (timer.current) clearTimeout(timer.current);
+    stopSpeak();
+    setIdx(null);
+  };
+
+  const play = (texts: string[], rate?: number) => {
+    if (!texts.length) return;
+    active.current = true;
+    const step = (i: number) => {
+      if (!active.current || i >= texts.length) {
+        active.current = false;
+        setIdx(null);
+        return;
+      }
+      setIdx(i);
+      speak(texts[i], {
+        rate,
+        onend: () => {
+          timer.current = setTimeout(() => step(i + 1), 350);
+        },
+      });
+    };
+    step(0);
+  };
+
+  useEffect(
+    () => () => {
+      active.current = false;
+      if (timer.current) clearTimeout(timer.current);
+      stopSpeak();
+    },
+    []
+  );
+
+  return { idx, playing: idx !== null, play, stop };
+}
 
 export default function Dialogue() {
   const { scenarioId = '' } = useParams();
@@ -71,6 +116,7 @@ export default function Dialogue() {
 function ListenPhase({ sc, onNext }: { sc: NonNullable<ReturnType<typeof getScenarioById>>; onNext: () => void }) {
   const [showText, setShowText] = useState(true);
   const [showRu, setShowRu] = useState(false);
+  const seq = useSequencePlayer();
   return (
     <Card>
       <div className="flex items-center justify-between mb-2">
@@ -84,10 +130,29 @@ function ListenPhase({ sc, onNext }: { sc: NonNullable<ReturnType<typeof getScen
           </button>
         </div>
       </div>
+      {isTtsSupported &&
+        (seq.playing ? (
+          <Button variant="danger" className="w-full mb-2" onClick={seq.stop}>
+            ⏹ Остановить ({(seq.idx ?? 0) + 1}/{sc.listening.length})
+          </Button>
+        ) : (
+          <Button
+            variant="secondary"
+            className="w-full mb-2"
+            onClick={() => seq.play(sc.listening.map((l) => l.en))}
+          >
+            ▶ Проиграть весь диалог
+          </Button>
+        ))}
       <div className="space-y-2.5 max-h-[46vh] overflow-y-auto">
         {sc.listening.map((line, i) => (
-          <div key={i} className="flex items-start gap-2 bg-slate-50 rounded-xl p-2.5">
-            <div className="flex flex-col gap-1">
+          <div
+            key={i}
+            className={`flex items-start gap-2 rounded-xl p-2.5 transition-colors ${
+              seq.idx === i ? 'bg-brand-50 border border-brand-300' : 'bg-slate-50 border border-transparent'
+            }`}
+          >
+            <div className="flex flex-col gap-1" onClickCapture={seq.stop}>
               <SpeakButton text={line.en} small />
               <SpeakButton text={line.en} slow small />
             </div>
@@ -188,6 +253,7 @@ function DialoguePhase({
   const [sttConf, setSttConf] = useState<number | undefined>(undefined);
   const scrollRef = useRef<HTMLDivElement>(null);
   const isRemote = aiMode() === 'remote';
+  const seq = useSequencePlayer();
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
@@ -246,7 +312,17 @@ function DialoguePhase({
     <Card>
       <div className="flex items-center justify-between mb-2">
         <span className="text-sm font-bold">💬 Диалог — вы: {sc.roles.user}, собеседник: {sc.roles.ai}</span>
-        <Tag color={isRemote ? 'green' : 'slate'}>{isRemote ? 'AI' : 'офлайн'}</Tag>
+        <div className="flex items-center gap-2">
+          {isTtsSupported && history.length > 1 && (
+            <button
+              onClick={() => (seq.playing ? seq.stop() : seq.play(history.map((t) => t.text)))}
+              className="text-xs text-brand-600 underline whitespace-nowrap"
+            >
+              {seq.playing ? `⏹ стоп (${(seq.idx ?? 0) + 1}/${history.length})` : '▶ весь диалог'}
+            </button>
+          )}
+          <Tag color={isRemote ? 'green' : 'slate'}>{isRemote ? 'AI' : 'офлайн'}</Tag>
+        </div>
       </div>
 
       <div ref={scrollRef} className="space-y-2 max-h-[38vh] overflow-y-auto mb-3">
@@ -255,7 +331,7 @@ function DialoguePhase({
             <div
               className={`max-w-[85%] rounded-2xl px-3 py-2 text-sm ${
                 t.role === 'user' ? 'bg-brand-600 text-white' : 'bg-slate-100'
-              }`}
+              } ${seq.idx === i ? 'ring-2 ring-brand-400' : ''}`}
             >
               {t.role === 'ai' && (
                 <div className="flex items-start gap-1.5">
