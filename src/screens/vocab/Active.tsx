@@ -155,7 +155,7 @@ function ActiveCard({ task, onDone }: { task: Task; onDone: (ok: boolean) => voi
 
       {task.kind === 'sentence' && (
         <p className="text-sm text-slate-700 mb-2">
-          Придумайте предложение со словом <b>«{task.word.en}»</b> ({task.word.ru}) и произнесите его вслух.
+          Придумайте предложение со словом <b>«{task.word.en}»</b> ({task.word.ru}) — скажите его или напишите.
         </p>
       )}
 
@@ -191,18 +191,19 @@ function ActiveCard({ task, onDone }: { task: Task; onDone: (ok: boolean) => voi
           <p className="text-sm font-semibold mb-2 italic">
             «Tell me about a situation where you {task.word.en.replace(/^to\s+/i, '')}.»
           </p>
-          <div className="mb-2">
-            <MicButton
-              onResult={(t) => {
-                if (t) {
-                  setInput(t);
-                  check(t);
-                }
-              }}
-            />
-          </div>
         </>
       )}
+
+      <div className="mb-2">
+        <MicButton
+          onResult={(t) => {
+            if (t) {
+              setInput(t);
+              check(t);
+            }
+          }}
+        />
+      </div>
 
       <div className="flex gap-2">
         <textarea
