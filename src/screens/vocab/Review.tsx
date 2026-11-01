@@ -16,7 +16,8 @@ export default function Review() {
   // новые слова, ещё не добавленные в SRS — предлагаем изучить через темы
   const queue = dueIds;
   const done = idx >= queue.length;
-  const word = queue.length ? getWordById(queue[Math.min(idx, queue.length - 1)]) : undefined;
+  const wordFor = (id: string) => getWordById(id) ?? s.customWords.find((w) => w.id === id);
+  const word = queue.length ? wordFor(queue[Math.min(idx, queue.length - 1)]) : undefined;
   const rec = word ? s.srs[word.id] : undefined;
 
   // расписание ближайших повторений
@@ -37,7 +38,7 @@ export default function Review() {
           {upcoming.length > 0 && (
             <div className="text-xs text-slate-400 mb-4">
               Ближайшие повторения:{' '}
-              {upcoming.map(([id, r]) => `${getWordById(id)?.en ?? id} (${dueIn(r)})`).join(', ')}
+              {upcoming.map(([id, r]) => `${getWordById(id)?.en ?? s.customWords.find((w) => w.id === id)?.en ?? id} (${dueIn(r)})`).join(', ')}
             </div>
           )}
           <Link to="/vocab">

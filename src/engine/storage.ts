@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { ErrorTag, Level } from '../types';
+import type { ErrorTag, Level, VocabWord } from '../types';
 import type { SrsRecord } from './srs';
 import { newRecord, grade, isDue } from './srs';
 
@@ -55,6 +55,8 @@ export interface AppState {
   mistakes: Mistake[];
   speaking: Record<string, SpeakingProgress>;
   sentences: Record<string, SentenceProgress>;
+  dialogues: Record<string, { opened: number; lastAt: number }>; // dialogueId → прогресс чтения
+  customWords: VocabWord[]; // личный словарь (выражения из диалогов)
   activity: Record<string, number>; // 'YYYY-MM-DD' → count
   lastLesson: { path: string; label: string } | null;
   recommendations: string[];
@@ -71,6 +73,9 @@ export interface AppState {
   clearMistakes: () => void;
   saveSpeaking: (scenarioId: string, score: number) => void;
   saveSentence: (packId: string, score: number, maxStep: number, passScore: number) => void;
+  touchDialogue: (dialogueId: string) => void;
+  saveCustomWord: (w: VocabWord) => void;
+  removeCustomWord: (wordId: string) => void;
   touchActivity: () => void;
   setLastLesson: (l: { path: string; label: string } | null) => void;
   setRecommendations: (r: string[]) => void;
@@ -101,6 +106,8 @@ export const useApp = create<AppState>()(
       mistakes: [],
       speaking: {},
       sentences: {},
+      dialogues: {},
+      customWords: [],
       activity: {},
       lastLesson: null,
       recommendations: [],
@@ -189,6 +196,28 @@ export const useApp = create<AppState>()(
           };
         }),
 
+      touchDialogue: (dialogueId) =>
+        set((s) => {
+          const p = s.dialogues[dialogueId] ?? { opened: 0, lastAt: 0 };
+          return {
+            dialogues: { ...s.dialogues, [dialogueId]: { opened: p.opened + 1, lastAt: Date.now() } },
+          };
+        }),
+
+      saveCustomWord: (w) =>
+        set((s) =>
+          s.customWords.some((x) => x.id === w.id) || s.customWords.some((x) => x.en.toLowerCase() === w.en.toLowerCase())
+            ? s
+            : { customWords: [...s.customWords, w] }
+        ),
+
+      removeCustomWord: (wordId) =>
+        set((s) => {
+          const srs = { ...s.srs };
+          delete srs[wordId];
+          return { customWords: s.customWords.filter((w) => w.id !== wordId), srs };
+        }),
+
       touchActivity: () =>
         set((s) => {
           const key = new Date().toISOString().slice(0, 10);
@@ -212,6 +241,8 @@ export const useApp = create<AppState>()(
           mistakes: [],
           speaking: {},
           sentences: {},
+          dialogues: {},
+          customWords: [],
           activity: {},
           lastLesson: null,
           recommendations: [],

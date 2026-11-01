@@ -236,6 +236,44 @@ export interface SentencePack {
   remedial: RemedialDrill[];
 }
 
+// ===== Модуль «Диалоги: читаем и слушаем» =====
+
+export type DialogueTopic = 'everyday' | 'work' | 'shopping' | 'family' | 'school' | 'travel' | 'social';
+
+export const DIALOGUE_TOPIC_RU: Record<DialogueTopic, string> = {
+  everyday: 'Повседневная жизнь',
+  work: 'Работа',
+  shopping: 'Покупки',
+  family: 'Семья',
+  school: 'Учёба',
+  travel: 'Путешествия',
+  social: 'Коллеги и смол-ток',
+};
+
+export interface DialogueLine {
+  speaker: string; // имя персонажа
+  en: string;
+  ru: string;
+}
+
+// Выражение из диалога: тап по нему показывает перевод и пояснение
+export interface DialogueExpression {
+  phrase: string; // как в тексте (регистр не важен при поиске)
+  ru: string;
+  note?: string; // пояснение на русском
+  example?: { en: string; ru: string };
+}
+
+export interface ReadDialogue {
+  id: string;
+  title: string; // RU
+  topic: DialogueTopic;
+  level: Level;
+  durationMin: number; // примерная длительность прослушивания
+  lines: DialogueLine[];
+  expressions: DialogueExpression[];
+}
+
 // ===== Входной тест =====
 
 export interface PlacementItem {

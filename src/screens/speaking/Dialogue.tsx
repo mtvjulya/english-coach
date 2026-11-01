@@ -5,56 +5,11 @@ import { useApp } from '../../engine/storage';
 import { getAI, registerScenario, aiMode } from '../../engine/ai';
 import type { ChatTurn, UtteranceFeedback } from '../../engine/ai/types';
 import { Card, Button, ProgressBar, Tag, VerdictBadge } from '../../components/ui';
-import { SpeakButton, MicButton } from '../../components/Audio';
+import { SpeakButton, MicButton, useSequencePlayer } from '../../components/Audio';
 import { tokens } from '../../engine/checker';
 import { listenOnce, isSttSupported, isTtsSupported, speak, stopSpeak } from '../../engine/speech';
 
 type Phase = 'listen' | 'comprehension' | 'dialogue' | 'monologue' | 'done';
-
-// Последовательное воспроизведение списка реплик с подсветкой текущей и возможностью стопа
-function useSequencePlayer() {
-  const [idx, setIdx] = useState<number | null>(null);
-  const active = useRef(false);
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const stop = () => {
-    active.current = false;
-    if (timer.current) clearTimeout(timer.current);
-    stopSpeak();
-    setIdx(null);
-  };
-
-  const play = (texts: string[], rate?: number) => {
-    if (!texts.length) return;
-    active.current = true;
-    const step = (i: number) => {
-      if (!active.current || i >= texts.length) {
-        active.current = false;
-        setIdx(null);
-        return;
-      }
-      setIdx(i);
-      speak(texts[i], {
-        rate,
-        onend: () => {
-          timer.current = setTimeout(() => step(i + 1), 350);
-        },
-      });
-    };
-    step(0);
-  };
-
-  useEffect(
-    () => () => {
-      active.current = false;
-      if (timer.current) clearTimeout(timer.current);
-      stopSpeak();
-    },
-    []
-  );
-
-  return { idx, playing: idx !== null, play, stop };
-}
 
 export default function Dialogue() {
   const { scenarioId = '' } = useParams();

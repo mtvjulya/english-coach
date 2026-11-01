@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { VOCAB_THEMES } from '../../data/vocab';
 import { useApp, dueWords } from '../../engine/storage';
 import { Card, Tag, ProgressBar } from '../../components/ui';
+import { SpeakButton } from '../../components/Audio';
 import { isDue } from '../../engine/srs';
 
 export default function VocabThemes() {
@@ -22,6 +23,33 @@ export default function VocabThemes() {
             </div>
           </Card>
         </Link>
+      )}
+
+      {s.customWords.length > 0 && (
+        <Card>
+          <div className="font-bold text-sm mb-2">⭐ Мои выражения</div>
+          <div className="space-y-2">
+            {s.customWords.map((w) => (
+              <div key={w.id} className="flex items-center gap-2 rounded-xl bg-slate-50 px-2.5 py-2">
+                <SpeakButton text={w.en} small />
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-semibold break-words">{w.en}</div>
+                  <div className="text-xs text-slate-500">{w.ru}</div>
+                </div>
+                <button
+                  onClick={() => s.removeCustomWord(w.id)}
+                  className="text-slate-300 active:text-rose-500 text-lg leading-none px-1"
+                  title="Удалить"
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+          <p className="text-[11px] text-slate-400 mt-2">
+            Сохранённые в диалогах выражения попадают в интервальное повторение.
+          </p>
+        </Card>
       )}
 
       <div className="space-y-2">

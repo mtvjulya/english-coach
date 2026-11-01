@@ -5,6 +5,7 @@ import { GRAMMAR_TOPICS } from '../data/grammar';
 import { VOCAB_THEMES, ALL_WORDS } from '../data/vocab';
 import { SCENARIOS } from '../data/speaking/scenarios';
 import { SENTENCE_PACKS } from '../data/sentences';
+import { READ_DIALOGUES } from '../data/dialogues';
 import { Card, Button, ProgressBar, StatCard, SectionTitle, Tag } from '../components/ui';
 import { ERROR_TAG_RU } from '../types';
 import { useEffect } from 'react';
@@ -25,8 +26,9 @@ export default function Home() {
   const due = dueWords(s).length;
   const speakingDone = Object.values(s.speaking).reduce((a, p) => a + p.attempts, 0);
   const sentencesDone = SENTENCE_PACKS.filter((p) => s.sentences[p.id]?.mastered).length;
+  const dialoguesRead = READ_DIALOGUES.filter((d) => s.dialogues[d.id]).length;
   const streak = streakDays(s.activity);
-  const plan = todayPlan(s, GRAMMAR_TOPICS, VOCAB_THEMES, SCENARIOS, SENTENCE_PACKS);
+  const plan = todayPlan(s, GRAMMAR_TOPICS, VOCAB_THEMES, SCENARIOS, SENTENCE_PACKS, READ_DIALOGUES);
   const resume = resumeLesson(s, GRAMMAR_TOPICS);
   const recs = buildRecommendations(s, GRAMMAR_TOPICS);
   const topMistakes = mistakeStats(s.mistakes).slice(0, 3);
@@ -110,7 +112,7 @@ export default function Home() {
       </Card>
 
       {/* модули */}
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-3 gap-2">
         <Link to="/grammar" className="bg-white rounded-2xl border border-slate-200 p-3 text-center active:bg-slate-50">
           <div className="text-2xl">📘</div>
           <div className="text-xs font-bold mt-1">Грамматика</div>
@@ -136,6 +138,18 @@ export default function Home() {
           <div className="text-[10px] text-slate-400">
             {sentencesDone}/{SENTENCE_PACKS.length} пакетов
           </div>
+        </Link>
+        <Link to="/dialogues" className="bg-white rounded-2xl border border-slate-200 p-3 text-center active:bg-slate-50">
+          <div className="text-2xl">💬</div>
+          <div className="text-xs font-bold mt-1">Диалоги</div>
+          <div className="text-[10px] text-slate-400">
+            {dialoguesRead}/{READ_DIALOGUES.length} прочитано
+          </div>
+        </Link>
+        <Link to="/vocab" className="bg-white rounded-2xl border border-slate-200 p-3 text-center active:bg-slate-50">
+          <div className="text-2xl">⭐</div>
+          <div className="text-xs font-bold mt-1">Мой словарь</div>
+          <div className="text-[10px] text-slate-400">{s.customWords.length} выражений</div>
         </Link>
       </div>
 

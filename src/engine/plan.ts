@@ -1,4 +1,4 @@
-import type { GrammarTopic, Scenario, SentencePack, VocabTheme } from '../types';
+import type { GrammarTopic, ReadDialogue, Scenario, SentencePack, VocabTheme } from '../types';
 import type { AppState, TopicProgress } from './storage';
 import { getTopic, dueWords } from './storage';
 import { ERROR_TAG_RU } from '../types';
@@ -18,7 +18,8 @@ export function todayPlan(
   topics: GrammarTopic[],
   themes: VocabTheme[],
   scenarios: Scenario[],
-  packs: SentencePack[] = []
+  packs: SentencePack[] = [],
+  dialogues: ReadDialogue[] = []
 ): PlanItem[] {
   const items: PlanItem[] = [];
 
@@ -93,6 +94,18 @@ export function todayPlan(
       title: `Конструктор: ${pack.title}`,
       subtitle: 'Построение предложений по уровням',
       path: `/sentences/${pack.id}`,
+      done: false,
+    });
+  }
+
+  // 6. диалоги для чтения и аудирования
+  const dlg = dialogues.find((d) => !s.dialogues[d.id]);
+  if (dlg) {
+    items.push({
+      id: `dlg-${dlg.id}`,
+      title: `Диалог: ${dlg.title}`,
+      subtitle: 'Читаем и слушаем',
+      path: `/dialogues/${dlg.id}`,
       done: false,
     });
   }

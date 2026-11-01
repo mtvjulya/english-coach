@@ -1,5 +1,50 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { speak, stopSpeak, listenOnce, isTtsSupported, isSttSupported, sttErrorText } from '../engine/speech';
+
+// Последовательное воспроизведение списка реплик с подсветкой текущей и возможностью стопа
+export function useSequencePlayer() {
+  const [idx, setIdx] = useState<number | null>(null);
+  const active = useRef(false);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const stop = () => {
+    active.current = false;
+    if (timer.current) clearTimeout(timer.current);
+    stopSpeak();
+    setIdx(null);
+  };
+
+  const play = (texts: string[], rate?: number) => {
+    if (!texts.length) return;
+    active.current = true;
+    const step = (i: number) => {
+      if (!active.current || i >= texts.length) {
+        active.current = false;
+        setIdx(null);
+        return;
+      }
+      setIdx(i);
+      speak(texts[i], {
+        rate,
+        onend: () => {
+          timer.current = setTimeout(() => step(i + 1), 350);
+        },
+      });
+    };
+    step(0);
+  };
+
+  useEffect(
+    () => () => {
+      active.current = false;
+      if (timer.current) clearTimeout(timer.current);
+      stopSpeak();
+    },
+    []
+  );
+
+  return { idx, playing: idx !== null, play, stop };
+}
 
 // Кнопка озвучки (TTS)
 export function SpeakButton({ text, slow = false, small = false }: { text: string; slow?: boolean; small?: boolean }) {

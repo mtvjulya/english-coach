@@ -8,6 +8,7 @@ const tabs = [
   { to: '/vocab', icon: '📖', label: 'Слова' },
   { to: '/speaking', icon: '🎙️', label: 'Разговор' },
   { to: '/sentences', icon: '🧩', label: 'Построение' },
+  { to: '/dialogues', icon: '💬', label: 'Диалоги' },
 ];
 
 const TITLES: [RegExp, string][] = [
@@ -27,6 +28,8 @@ const TITLES: [RegExp, string][] = [
   [/^\/speaking/, 'Разговорный английский'],
   [/^\/sentences\/[^/]+/, 'Конструктор предложений'],
   [/^\/sentences/, 'Построение предложений'],
+  [/^\/dialogues\/[^/]+/, 'Диалог: читаем и слушаем'],
+  [/^\/dialogues/, 'Диалоги'],
   [/^\/mistakes/, 'Ошибки и рекомендации'],
   [/^\/settings/, 'Настройки'],
 ];
@@ -35,7 +38,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const ai = aiMode();
-  const topLevel = ['/', '/grammar', '/vocab', '/speaking', '/sentences'].includes(pathname);
+  const topLevel = ['/', '/grammar', '/vocab', '/speaking', '/sentences', '/dialogues'].includes(pathname);
   const title = TITLES.find(([re]) => re.test(pathname))?.[1] ?? 'English Coach';
   return (
     <div className="mx-auto max-w-app min-h-dvh bg-slate-100 flex flex-col">
