@@ -31,6 +31,15 @@ export interface SpeakingProgress {
   lastAt: number;
 }
 
+export interface SentenceProgress {
+  attempts: number;
+  bestScore: number; // 0..1
+  lastScore: number;
+  lastAt: number;
+  mastered: boolean;
+  maxStep: number; // сколько уровней сложности пройдено
+}
+
 export interface PlacementResult {
   grammar: Level;
   vocab: Level;
@@ -45,6 +54,7 @@ export interface AppState {
   favorites: string[]; // wordId
   mistakes: Mistake[];
   speaking: Record<string, SpeakingProgress>;
+  sentences: Record<string, SentenceProgress>;
   activity: Record<string, number>; // 'YYYY-MM-DD' → count
   lastLesson: { path: string; label: string } | null;
   recommendations: string[];
@@ -60,6 +70,7 @@ export interface AppState {
   addMistake: (m: Omit<Mistake, 'id' | 'at'>) => void;
   clearMistakes: () => void;
   saveSpeaking: (scenarioId: string, score: number) => void;
+  saveSentence: (packId: string, score: number, maxStep: number, passScore: number) => void;
   touchActivity: () => void;
   setLastLesson: (l: { path: string; label: string } | null) => void;
   setRecommendations: (r: string[]) => void;
@@ -89,6 +100,7 @@ export const useApp = create<AppState>()(
       favorites: [],
       mistakes: [],
       speaking: {},
+      sentences: {},
       activity: {},
       lastLesson: null,
       recommendations: [],
@@ -152,6 +164,31 @@ export const useApp = create<AppState>()(
           };
         }),
 
+      saveSentence: (packId, score, maxStep, passScore) =>
+        set((s) => {
+          const p: SentenceProgress = s.sentences[packId] ?? {
+            attempts: 0,
+            bestScore: 0,
+            lastScore: 0,
+            lastAt: 0,
+            mastered: false,
+            maxStep: 0,
+          };
+          return {
+            sentences: {
+              ...s.sentences,
+              [packId]: {
+                attempts: p.attempts + 1,
+                bestScore: Math.max(p.bestScore, score),
+                lastScore: score,
+                lastAt: Date.now(),
+                mastered: p.mastered || score >= passScore,
+                maxStep: Math.max(p.maxStep, maxStep),
+              },
+            },
+          };
+        }),
+
       touchActivity: () =>
         set((s) => {
           const key = new Date().toISOString().slice(0, 10);
@@ -174,6 +211,7 @@ export const useApp = create<AppState>()(
           favorites: [],
           mistakes: [],
           speaking: {},
+          sentences: {},
           activity: {},
           lastLesson: null,
           recommendations: [],

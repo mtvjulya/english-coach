@@ -13,4 +13,5 @@
 - UI language: Russian; content being taught: English
 - All AI logic goes through `AIProvider` (src/engine/ai/) — never call remote APIs directly from screens
 - Progress persists via zustand `persist` → localStorage key `english-coach-v1`
+- 4-й модуль «Построение предложений»: `/sentences`, данные в `src/data/sentences/` (5 уровней нарастания, чанки с ролями, remedial-дриллы)
 - Free tech only: Web Speech API for TTS/STT, local checker for translations

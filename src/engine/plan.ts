@@ -1,4 +1,4 @@
-import type { GrammarTopic, Scenario, VocabTheme } from '../types';
+import type { GrammarTopic, Scenario, SentencePack, VocabTheme } from '../types';
 import type { AppState, TopicProgress } from './storage';
 import { getTopic, dueWords } from './storage';
 import { ERROR_TAG_RU } from '../types';
@@ -17,7 +17,8 @@ export function todayPlan(
   s: AppState,
   topics: GrammarTopic[],
   themes: VocabTheme[],
-  scenarios: Scenario[]
+  scenarios: Scenario[],
+  packs: SentencePack[] = []
 ): PlanItem[] {
   const items: PlanItem[] = [];
 
@@ -80,6 +81,18 @@ export function todayPlan(
       title: `Разговор: ${scen.title}`,
       subtitle: 'Диалог + аудирование',
       path: `/speaking/${scen.id}`,
+      done: false,
+    });
+  }
+
+  // 5. конструктор предложений
+  const pack = packs.find((p) => !s.sentences[p.id]?.mastered);
+  if (pack) {
+    items.push({
+      id: `sent-${pack.id}`,
+      title: `Конструктор: ${pack.title}`,
+      subtitle: 'Построение предложений по уровням',
+      path: `/sentences/${pack.id}`,
       done: false,
     });
   }

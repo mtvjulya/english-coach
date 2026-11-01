@@ -178,6 +178,64 @@ export interface Scenario {
   monologue: string[]; // темы свободной речи 30–90 сек
 }
 
+// ===== Модуль «Построение предложений» (Sentence Builder) =====
+
+// Роль смыслового блока в предложении — используется для визуальной схемы
+export type ChunkRole =
+  | 'subject'
+  | 'predicate'
+  | 'object'
+  | 'complement'
+  | 'adverbial'
+  | 'connector'
+  | 'clause'
+  | 'modifier';
+
+export const CHUNK_ROLE_RU: Record<ChunkRole, string> = {
+  subject: 'Подлежащее',
+  predicate: 'Сказуемое',
+  object: 'Дополнение',
+  complement: 'Именная часть',
+  adverbial: 'Обстоятельство',
+  connector: 'Союз / связка',
+  clause: 'Придаточная часть',
+  modifier: 'Определение / наречие',
+};
+
+export interface SentenceChunk {
+  text: string; // блок предложения (слово/фраза/клауза), может включать запятую
+  role: ChunkRole;
+  ru?: string; // перевод/пояснение блока
+}
+
+// Один уровень нарастания сложности (1 = основа … 5 = продвинутая речь)
+export interface SentenceStep {
+  en: string; // эталонное предложение
+  ru: string; // русский образец (задание для ru→en)
+  chunks: SentenceChunk[]; // блоки для пошаговой сборки и схемы
+  accepts?: string[]; // дополнительные корректные варианты
+  grammarNote: string; // грамматическое пояснение уровня (RU)
+  diffNote?: string; // что изменилось относительно предыдущего уровня
+}
+
+// Промежуточные упражнения на конкретный тип ошибки
+export interface RemedialDrill {
+  tag: ErrorTag;
+  title: string; // RU
+  items: { ru: string; answers: string[] }[];
+}
+
+export interface SentencePack {
+  id: string;
+  title: string;
+  level: Level;
+  skills: string[]; // навыки, которые тренирует пакет (RU-лейблы)
+  grammarTopicIds?: string[]; // связанные темы грамматики (для ссылок на ошибки)
+  steps: SentenceStep[]; // 2..5 шагов по нарастанию
+  compose: { prompt: string; mustContain: string[]; samples: string[] };
+  remedial: RemedialDrill[];
+}
+
 // ===== Входной тест =====
 
 export interface PlacementItem {

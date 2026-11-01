@@ -15,6 +15,8 @@ import Review from './screens/vocab/Review';
 import ActiveUse from './screens/vocab/Active';
 import Scenarios from './screens/speaking/Scenarios';
 import Dialogue from './screens/speaking/Dialogue';
+import SentencesHub from './screens/sentences/Hub';
+import SentenceLesson from './screens/sentences/Lesson';
 import Mistakes from './screens/Mistakes';
 import Settings from './screens/Settings';
 
@@ -37,6 +39,8 @@ export default function App() {
         <Route path="/vocab/:themeId/active" element={<ActiveUse />} />
         <Route path="/speaking" element={<Scenarios />} />
         <Route path="/speaking/:scenarioId" element={<Dialogue />} />
+        <Route path="/sentences" element={<SentencesHub />} />
+        <Route path="/sentences/:packId" element={<SentenceLesson />} />
         <Route path="/mistakes" element={<Mistakes />} />
         <Route path="/settings" element={<Settings />} />
       </Routes>
