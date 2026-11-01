@@ -4,10 +4,10 @@ import { aiMode } from '../engine/ai';
 
 const tabs = [
   { to: '/', icon: '🏠', label: 'Главная' },
-  { to: '/grammar', icon: '📘', label: 'Грамматика' },
+  { to: '/grammar', icon: '📘', label: 'Грамм.' },
   { to: '/vocab', icon: '📖', label: 'Слова' },
   { to: '/speaking', icon: '🎙️', label: 'Разговор' },
-  { to: '/sentences', icon: '🧩', label: 'Построение' },
+  { to: '/sentences', icon: '🧩', label: 'Фразы' },
   { to: '/dialogues', icon: '💬', label: 'Диалоги' },
 ];
 
@@ -55,14 +55,14 @@ export default function Layout({ children }: { children: ReactNode }) {
         </NavLink>
       </header>
       <main className="flex-1 px-4 py-4 pb-24">{children}</main>
-      <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-app bg-white border-t border-slate-200 flex justify-around py-1.5 z-10">
+      <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-app bg-white border-t border-slate-200 flex justify-around py-1.5 z-10 overflow-x-auto">
         {tabs.map((t) => (
           <NavLink
             key={t.to}
             to={t.to}
             end={t.to === '/'}
             className={({ isActive }) =>
-              `flex flex-col items-center px-3 py-1 rounded-lg text-xs font-semibold transition-colors ${
+              `flex flex-col items-center px-2 py-1 rounded-lg text-[10px] font-semibold whitespace-nowrap transition-colors ${
                 isActive ? 'text-brand-700' : 'text-slate-400'
               }`
             }
