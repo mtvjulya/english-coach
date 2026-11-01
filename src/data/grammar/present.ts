@@ -1,0 +1,342 @@
+import type { GrammarTopic } from '../../types';
+
+export const presentSimple: GrammarTopic = {
+  id: 'present-simple',
+  title: 'Present Simple',
+  level: 'A1',
+  passScore: 0.8,
+  theory: {
+    explanation: [
+      'Present Simple — время для регулярных, повторяющихся действий и общих фактов: привычки, расписания, работа, истины («Земля вращается вокруг Солнца»).',
+      'Ключевой момент: в утверждении с he/she/it глагол получает окончание -s/-es (work → works, go → goes). С I/you/we/they окончания нет.',
+      'Отрицания и вопросы строятся с вспомогательным глаголом do (I/you/we/they) или does (he/she/it). Важно: после does основной глагол возвращается к начальной форме — «does» уже «забрал» себе -s: «Does she work?», а не «Does she works?».',
+      'Маркеры времени: always, usually, often, sometimes, rarely, never, every day/week, on Mondays.',
+    ],
+    formulas: {
+      positive: [
+        'I / You / We / They + V₁  →  I work every day.',
+        'He / She / It + V₁-s/es  →  She works in Dublin.',
+      ],
+      negative: [
+        'I / You / We / They + don\'t + V₁  →  I don\'t like coffee.',
+        'He / She / It + doesn\'t + V₁  →  He doesn\'t like coffee.',
+      ],
+      question: [
+        'Do + I/you/we/they + V₁ …?  →  Do you speak English?',
+        'Does + he/she/it + V₁ …?  →  Does she live here?',
+      ],
+    },
+    examples: [
+      { en: 'She goes to work every day.', ru: 'Она ходит на работу каждый день.' },
+      { en: 'I don\'t drink coffee in the evening.', ru: 'Я не пью кофе вечером.' },
+      { en: 'Does he play tennis on Saturdays?', ru: 'Он играет в теннис по субботам?' },
+      { en: 'We usually finish work at six.', ru: 'Обычно мы заканчиваем работу в шесть.' },
+      { en: 'The train leaves at 9.30.', ru: 'Поезд отправляется в 9:30 (расписание).' },
+    ],
+    comparison: [
+      {
+        title: 'Present Simple vs Present Continuous',
+        points: [
+          { aspect: 'Значение', this: 'регулярное действие, факт', other: 'действие прямо сейчас' },
+          { aspect: 'Маркеры', this: 'always, every day, usually', other: 'now, at the moment, today' },
+          { aspect: 'Пример', this: 'She works in Dublin. (её работа вообще)', other: 'She is working now. (в эту минуту)' },
+        ],
+      },
+    ],
+    mistakes: [
+      { wrong: 'He don\'t like coffee.', right: 'He doesn\'t like coffee.', note: 'С he/she/it — doesn\'t, а не don\'t.' },
+      { wrong: 'Does she works here?', right: 'Does she work here?', note: 'После does глагол без -s.' },
+      { wrong: 'She work every day.', right: 'She works every day.', note: 'Не забывайте -s в 3-м лице.' },
+      { wrong: 'I am go to work.', right: 'I go to work.', note: 'Present Simple строится без am/is/are.' },
+    ],
+    quiz: [
+      {
+        question: 'Когда к глаголу добавляется -s в Present Simple?',
+        options: ['Со всеми местоимениями', 'Только с he/she/it', 'Только в вопросах', 'Никогда'],
+        correct: 1,
+        explanation: '-s добавляется только в 3-м лице ед. числа: he/she/it.',
+      },
+      {
+        question: 'Какая форма правильная: «Does she ___ coffee?»',
+        options: ['drinks', 'drink', 'drinking', 'drank'],
+        correct: 1,
+        explanation: 'После does глагол в начальной форме — does уже несёт грамматику 3-го лица.',
+      },
+      {
+        question: '«She ___ TV every evening.» Какой вариант?',
+        options: ['watch', 'watches', 'is watch', 'watching'],
+        correct: 1,
+        explanation: 'She — 3-е лицо → watches (глаголы на -ch получают -es).',
+      },
+    ],
+  },
+  exercises: [
+    {
+      type: 'choice',
+      prompt: 'Выберите правильную форму',
+      sentence: 'She ___ to work every day.',
+      options: ['go', 'goes', 'going', 'is go'],
+      answer: 1,
+      explanation: 'She — 3-е лицо ед. числа → goes. Go — неправильный глагол с формой goes.',
+      errorTag: 'third-person-s',
+    },
+    {
+      type: 'choice',
+      prompt: 'Выберите правильную форму',
+      sentence: '___ you speak English?',
+      options: ['Does', 'Do', 'Is', 'Are'],
+      answer: 1,
+      explanation: 'С you используется вспомогательный глагол do.',
+      errorTag: 'aux-do',
+    },
+    {
+      type: 'gap',
+      sentence: 'He ___ like coffee. (отрицание)',
+      answers: ["doesn't", 'does not'],
+      hint: 'does + not',
+      explanation: 'He — 3-е лицо → doesn\'t. После doesn\'t глагол like без -s.',
+      errorTag: 'aux-do',
+    },
+    {
+      type: 'gap',
+      sentence: 'They ___ football on Sundays.',
+      answers: ['play'],
+      hint: 'играть',
+      explanation: 'They → глагол без -s: play.',
+    },
+    {
+      type: 'fix',
+      wrong: 'He don\'t like coffee.',
+      answers: ["He doesn't like coffee.", 'He does not like coffee.'],
+      explanation: 'С he нужно doesn\'t. Don\'t используется с I/you/we/they.',
+      errorTag: 'aux-do',
+    },
+    {
+      type: 'fix',
+      wrong: 'Does she works in Dublin?',
+      answers: ['Does she work in Dublin?'],
+      explanation: 'После does основной глагол стоит в начальной форме — без -s.',
+      errorTag: 'third-person-s',
+    },
+    {
+      type: 'translate',
+      ru: 'Она работает в Дублине каждый день.',
+      answers: ['She works in Dublin every day.', 'She works every day in Dublin.'],
+      explanation: 'She works — глагол с -s; every day обычно в конце.',
+      errorTag: 'third-person-s',
+    },
+    {
+      type: 'translate',
+      ru: 'Ты говоришь по-английски?',
+      answers: ['Do you speak English?'],
+      explanation: 'Вопрос с you строится через do.',
+      errorTag: 'aux-do',
+    },
+    {
+      type: 'compose',
+      prompt: 'Придумайте предложение о своей ежедневной привычке с Present Simple (напишите или произнесите вслух).',
+      mustContain: ['every'],
+      samples: ['I drink tea every morning.', 'I go to the gym every day.'],
+      explanation: 'Используйте маркер every … и глагол в начальной форме (или с -s для he/she).',
+    },
+  ],
+  translation: [
+    {
+      kind: 'ru2en',
+      prompt: 'Он не любит кофе.',
+      answers: ["He doesn't like coffee.", 'He does not like coffee.'],
+      explanation: 'He + doesn\'t + глагол без -s.',
+    },
+    {
+      kind: 'ru2en',
+      prompt: 'Вы работаете каждый день?',
+      answers: ['Do you work every day?'],
+      explanation: 'Вопрос: Do + you + V?',
+    },
+    {
+      kind: 'en2ru',
+      prompt: 'She usually finishes work at six.',
+      answers: ['Она обычно заканчивает работу в шесть.', 'Обычно она заканчивает работу в шесть.'],
+      keywordsRu: ['обычно', 'заканчивает', 'работу', 'шесть'],
+    },
+    {
+      kind: 'listen',
+      prompt: 'He doesn\'t watch TV in the morning.',
+      answers: ['Он не смотрит телевизор по утрам.', 'Он не смотрит телевизор утром.'],
+      keywordsRu: ['не', 'смотрит', 'телевизор', 'утр'],
+      explanation: 'doesn\'t watch — отрицание 3-го лица.',
+    },
+    {
+      kind: 'speak',
+      prompt: 'Опишите устно свой обычный утренний распорядок (2–3 предложения в Present Simple).',
+      answers: [],
+      keywords: ['i'],
+      hint: 'I wake up at… / I usually… / I go to work by…',
+    },
+  ],
+};
+
+export const presentContinuous: GrammarTopic = {
+  id: 'present-continuous',
+  title: 'Present Continuous',
+  level: 'A1',
+  passScore: 0.8,
+  theory: {
+    explanation: [
+      'Present Continuous (am/is/are + V-ing) — действие, которое происходит прямо сейчас, в момент речи, или временная ситуация.',
+      'Выбор формы to be: I am, he/she/it is, you/we/they are. К основному глаголу добавляется -ing.',
+      'Ещё одно важное употребление — запланированное будущее: «I\'m meeting Anna tomorrow» (уже договорился).',
+      'Глаголы состояния (know, like, want, need, believe, understand) обычно НЕ используются в Continuous — у них нет «длительности».',
+    ],
+    formulas: {
+      positive: ['am/is/are + V-ing  →  I am working now. / She is reading.'],
+      negative: ['am/is/are + not + V-ing  →  He isn\'t sleeping. / They aren\'t playing.'],
+      question: ['Am/Is/Are + подлежащее + V-ing …?  →  Are you listening?'],
+    },
+    examples: [
+      { en: 'I am working right now.', ru: 'Я сейчас работаю (в эту минуту).' },
+      { en: 'She is cooking dinner.', ru: 'Она готовит ужин.' },
+      { en: 'We are not watching TV.', ru: 'Мы не смотрим телевизор (сейчас).' },
+      { en: 'Are they coming to the party?', ru: 'Они придут на вечеринку? (план)' },
+      { en: 'It is raining outside.', ru: 'На улице идёт дождь.' },
+    ],
+    comparison: [
+      {
+        title: 'Present Continuous vs Present Simple',
+        points: [
+          { aspect: 'Время действия', this: 'прямо сейчас / временно', other: 'регулярно / всегда' },
+          { aspect: 'Пример', this: 'I am reading a book. (сейчас)', other: 'I read books every evening. (привычка)' },
+          { aspect: 'Маркеры', this: 'now, at the moment, Look!', other: 'usually, every day, often' },
+        ],
+      },
+    ],
+    mistakes: [
+      { wrong: 'I working now.', right: 'I am working now.', note: 'Нужен am/is/are — он несёт время.' },
+      { wrong: 'She is cook dinner.', right: 'She is cooking dinner.', note: 'После is — глагол с -ing.' },
+      { wrong: 'I am knowing the answer.', right: 'I know the answer.', note: 'know — глагол состояния, не длится.' },
+      { wrong: 'He is go to school now.', right: 'He is going to school now.', note: 'Формула: is + V-ing.' },
+    ],
+    quiz: [
+      {
+        question: 'Какое предложение описывает действие прямо сейчас?',
+        options: ['She reads books.', 'She is reading a book.', 'She read a book.', 'She will read.'],
+        correct: 1,
+        explanation: 'is reading — Present Continuous, действие в момент речи.',
+      },
+      {
+        question: 'Выберите правильное: «They ___ TV now.»',
+        options: ['watch', 'watches', 'are watching', 'is watching'],
+        correct: 2,
+        explanation: 'They + are watching; слово now указывает на Continuous.',
+      },
+      {
+        question: 'Какой глагол обычно НЕ ставится в Continuous?',
+        options: ['run', 'eat', 'know', 'play'],
+        correct: 2,
+        explanation: 'know — глагол состояния. Говорят I know, а не I am knowing.',
+      },
+    ],
+  },
+  exercises: [
+    {
+      type: 'choice',
+      prompt: 'Выберите правильную форму',
+      sentence: 'Look! The baby ___ .',
+      options: ['sleeps', 'is sleeping', 'sleep', 'sleeping'],
+      answer: 1,
+      explanation: 'Look! — сигнал «смотри сейчас» → is sleeping.',
+    },
+    {
+      type: 'gap',
+      sentence: 'I ___ (write) an email at the moment.',
+      answers: ['am writing'],
+      explanation: 'I + am + V-ing. Глагол write теряет немую -e: writing.',
+    },
+    {
+      type: 'gap',
+      sentence: 'They ___ (not/play) football now, they are studying.',
+      answers: ['are not playing', "aren't playing", 'are not playing'],
+      explanation: 'Отрицание: are not + V-ing.',
+    },
+    {
+      type: 'fix',
+      wrong: 'She is cook dinner now.',
+      answers: ['She is cooking dinner now.'],
+      explanation: 'После is нужен глагол с -ing: cooking.',
+      errorTag: 'verb-form',
+    },
+    {
+      type: 'fix',
+      wrong: 'I am know the answer.',
+      answers: ['I know the answer.'],
+      explanation: 'know не употребляется в Continuous — это глагол состояния.',
+      errorTag: 'tense',
+    },
+    {
+      type: 'choice',
+      prompt: 'Present Simple или Continuous?',
+      sentence: 'He usually ___ tea, but today he ___ coffee.',
+      options: [
+        'drinks / is drinking',
+        'is drinking / drinks',
+        'drinks / drinks',
+        'drink / is drinking',
+      ],
+      answer: 0,
+      explanation: 'usually → Simple (drinks); today/сейчас → Continuous (is drinking).',
+      errorTag: 'tense',
+    },
+    {
+      type: 'translate',
+      ru: 'Что ты делаешь сейчас?',
+      answers: ['What are you doing now?', 'What are you doing?'],
+      explanation: 'Вопрос: What + are + you + doing?',
+      errorTag: 'word-order',
+    },
+    {
+      type: 'translate',
+      ru: 'Я сейчас встречаюсь с другом.',
+      answers: ['I am meeting a friend now.', "I'm meeting a friend now.", 'I am meeting my friend now.'],
+      explanation: 'План/действие сейчас → am meeting.',
+    },
+    {
+      type: 'compose',
+      prompt: 'Опишите, что происходит вокруг вас прямо сейчас (1–2 предложения с Present Continuous).',
+      mustContain: ['ing'],
+      samples: ['I am sitting at home and studying English.'],
+      explanation: 'Формула: am/is/are + глагол с -ing.',
+    },
+  ],
+  translation: [
+    {
+      kind: 'ru2en',
+      prompt: 'Она сейчас готовит ужин.',
+      answers: ['She is cooking dinner now.', "She's cooking dinner now.", 'She is cooking dinner.'],
+    },
+    {
+      kind: 'en2ru',
+      prompt: 'Are you listening to me?',
+      answers: ['Ты меня слушаешь?', 'Вы меня слушаете?'],
+      keywordsRu: ['слушаешь', 'слушаете'],
+    },
+    {
+      kind: 'listen',
+      prompt: 'We are not working today.',
+      answers: ['Мы сегодня не работаем.', 'Мы не работаем сегодня.'],
+      keywordsRu: ['не', 'работаем', 'сегодня'],
+    },
+    {
+      kind: 'ru2en',
+      prompt: 'Почему они бегут?',
+      answers: ['Why are they running?'],
+      explanation: 'Вопрос: Why + are + they + V-ing?',
+    },
+    {
+      kind: 'speak',
+      prompt: 'Скажите вслух, что вы делаете прямо сейчас и что делает кто-то из вашей семьи.',
+      answers: [],
+      keywords: ['ing'],
+      hint: 'I am … now. My mum is …',
+    },
+  ],
+};
