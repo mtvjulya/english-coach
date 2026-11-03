@@ -4,6 +4,7 @@ import { pastSimple, presentPerfect } from './past';
 import { futureForms, conditionals } from './future';
 import { articles, prepositions } from './articles-prepositions';
 import { modals, comparatives } from './modals-comparatives';
+import { passiveReporting, conditionalsAdvanced, inversionEmphasis, subjunctiveWish } from './advanced';
 
 export const GRAMMAR_TOPICS: GrammarTopic[] = [
   presentSimple,
@@ -16,6 +17,10 @@ export const GRAMMAR_TOPICS: GrammarTopic[] = [
   modals,
   comparatives,
   conditionals,
+  passiveReporting,
+  conditionalsAdvanced,
+  inversionEmphasis,
+  subjunctiveWish,
 ];
 
 export const getTopicById = (id: string): GrammarTopic | undefined =>

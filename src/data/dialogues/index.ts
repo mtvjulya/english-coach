@@ -252,6 +252,89 @@ const rentingCar: ReadDialogue = {
   ],
 };
 
+const salaryTalk: ReadDialogue = {
+  id: 'salary-talk',
+  title: 'Разговор о повышении зарплаты',
+  topic: 'work',
+  level: 'B2',
+  durationMin: 3,
+  lines: [
+    { speaker: 'Employee', en: 'Thanks for making time for me. I’d like to discuss my salary.', ru: 'Спасибо, что нашли время. Хотел бы обсудить мою зарплату.' },
+    { speaker: 'Manager', en: 'Of course. What did you have in mind?', ru: 'Конечно. Что вы имеете в виду?' },
+    { speaker: 'Employee', en: 'Over the past year I’ve taken on three extra projects and trained two new team members.', ru: 'За прошлый год я взял три дополнительных проекта и обучил двух новых сотрудников.' },
+    { speaker: 'Manager', en: 'I appreciate your contribution. But budgets are tight this quarter.', ru: 'Ценю ваш вклад. Но бюджеты в этом квартале ограничены.' },
+    { speaker: 'Employee', en: 'I understand. Still, given my results, I believe a ten per cent raise would be fair.', ru: 'Понимаю. И всё же, учитывая результаты, считаю справедливым повышение на десять процентов.' },
+    { speaker: 'Manager', en: 'That’s a significant jump. How about five per cent now and a review in six months?', ru: 'Это серьёзный скачок. Как насчёт пяти процентов сейчас и пересмотра через полгода?' },
+    { speaker: 'Employee', en: 'Could we make it seven per cent with the review in writing?', ru: 'Можем ли мы сделать семь процентов и зафиксировать пересмотр письменно?' },
+    { speaker: 'Manager', en: 'That’s reasonable. I’ll put it in an email today.', ru: 'Это разумно. Отправлю письмо сегодня.' },
+    { speaker: 'Employee', en: 'Great. I appreciate you hearing me out.', ru: 'Отлично. Спасибо, что выслушали меня.' },
+    { speaker: 'Manager', en: 'You’ve earned it. Keep up the good work.', ru: 'Вы это заслужили. Продолжайте в том же духе.' },
+  ],
+  expressions: [
+    { phrase: 'making time for me', ru: 'нашли для меня время', note: 'Make time — «выделить время».' },
+    { phrase: 'taken on', ru: 'взял на себя', note: 'Take on — брать задачи/ответственность.', example: { en: 'She took on more responsibility.', ru: 'Она взяла на себя больше ответственности.' } },
+    { phrase: 'budgets are tight', ru: 'бюджеты ограничены', note: 'Tight — «тугой, ограниченный» о деньгах и времени.' },
+    { phrase: 'How about', ru: 'как насчёт', note: 'Предложение-встречное в переговорах.' },
+    { phrase: 'in writing', ru: 'письменно, зафиксировано', note: 'Официальное подтверждение на бумаге/почте.' },
+    { phrase: 'hearing me out', ru: 'выслушали меня до конца', note: 'Hear someone out — выслушать полностью.' },
+  ],
+};
+
+const studyAbroad: ReadDialogue = {
+  id: 'study-abroad',
+  title: 'Обсуждение учёбы за границей',
+  topic: 'school',
+  level: 'C1',
+  durationMin: 3,
+  lines: [
+    { speaker: 'Alex', en: 'So you’re seriously considering a master’s in the UK?', ru: 'Так ты всерьёз думаешь о магистратуре в Британии?' },
+    { speaker: 'Dana', en: 'Yeah. The programme I want is world-renowned, but tuition fees are eye-watering.', ru: 'Да. Программа, которую я хочу, мирового уровня, но плата за обучение заоблачная.' },
+    { speaker: 'Alex', en: 'Have you looked into scholarships? Some cover nearly everything.', ru: 'Ты изучала стипендии? Некоторые покрывают почти всё.' },
+    { speaker: 'Dana', en: 'I’ve shortlisted three. The deadlines are brutal though — essays, references, the lot.', ru: 'Отобрала три. Правда, сроки жёсткие — эссе, рекомендации, всё сразу.' },
+    { speaker: 'Alex', en: 'Worth the grind. Did you weigh up the cost of living there?', ru: 'Оно того стоит. А просчитывала стоимость жизни там?' },
+    { speaker: 'Dana', en: 'Roughly. London would stretch me thin; Manchester looks more feasible.', ru: 'Примерно. Лондон меня разорит; Манчестер выглядит реальнее.' },
+    { speaker: 'Alex', en: 'And homesickness? Being that far from everyone isn’t easy.', ru: 'А тоска по дому? Быть так далеко от всех нелегко.' },
+    { speaker: 'Dana', en: 'That’s my main hesitation, to be honest. But opportunities like this don’t come twice.', ru: 'Это моё главное сомнение, если честно. Но такие возможности дважды не приходят.' },
+    { speaker: 'Alex', en: 'Fair enough. Whatever you decide, I’m behind you.', ru: 'Справедливо. Что бы ты ни решила — я тебя поддерживаю.' },
+    { speaker: 'Dana', en: 'That means a lot. I’ll keep you posted on the applications.', ru: 'Это очень много значит. Буду держать тебя в курсе по заявкам.' },
+  ],
+  expressions: [
+    { phrase: 'world-renowned', ru: 'известный во всём мире', note: 'Составное прилагательное.' },
+    { phrase: 'eye-watering', ru: 'заоблачный, глаза на лоб', note: 'Разговорное, о ценах.', example: { en: 'The repair bill was eye-watering.', ru: 'Счёт за ремонт был заоблачный.' } },
+    { phrase: 'looked into', ru: 'изучала, разузнала', note: 'Look into — исследовать вариант.' },
+    { phrase: 'Worth the grind', ru: 'стоит усилий', note: 'Grind — «тяжёлая рутина»; выражение «стоит потрудиться».' },
+    { phrase: 'stretch me thin', ru: 'разорит, не потяну', note: 'Букв. «растянет тонко» — про деньги и силы.' },
+    { phrase: 'don’t come twice', ru: 'не даются дважды', note: 'Об уникальных возможностях.' },
+  ],
+};
+
+const bookClub: ReadDialogue = {
+  id: 'book-club',
+  title: 'Книжный клуб: тонкости сюжета',
+  topic: 'social',
+  level: 'C2',
+  durationMin: 4,
+  lines: [
+    { speaker: 'Elena', en: 'So — the ending. Did anyone else find it deliberately ambiguous?', ru: 'Итак, финал. Кому-нибудь ещё показалось, что он намеренно двусмысленный?' },
+    { speaker: 'Marcus', en: 'Ambiguous is putting it mildly. I’d call it downright evasive.', ru: '«Двусмысленный» — это мягко сказано. Я бы назвал его откровенно уклончивым.' },
+    { speaker: 'Priya', en: 'I’d push back on that. The ambiguity mirrors the protagonist’s own uncertainty — it’s the whole point.', ru: 'Позволю себе не согласиться. Двусмысленность отражает неуверенность самой героини — в этом вся суть.' },
+    { speaker: 'Elena', en: 'That’s a charitable reading. Still, the author withholds so much that it borders on withholding for its own sake.', ru: 'Это благосклонное прочтение. Но автор скрывает так много, что это граничит с утаиванием ради самого утаивания.' },
+    { speaker: 'Marcus', en: 'Precisely. It smacks of a writer who couldn’t commit to an ending.', ru: 'Именно. Попахивает автором, который не смог определиться с финалом.' },
+    { speaker: 'Priya', en: 'Or one who trusts the reader to sit with discomfort. Not everything needs resolution.', ru: 'Или тем, кто доверяет читателю остаться наедине с дискомфортом. Не всё требует развязки.' },
+    { speaker: 'Elena', en: 'Fair enough — though I’d argue there’s a fine line between trusting and abandoning your reader.', ru: 'Справедливо, хотя, осмелюсь заметить, есть тонкая грань между доверием читателю и его бросанием.' },
+    { speaker: 'Marcus', en: 'Whatever the intent, it certainly gave us plenty to chew on.', ru: 'Каков бы ни был замысел — пищи для размышлений он точно дал.' },
+    { speaker: 'Priya', en: 'On that, at least, we can all agree.', ru: 'Вот в этом, по крайней мере, мы все согласны.' },
+  ],
+  expressions: [
+    { phrase: 'putting it mildly', ru: 'мягко говоря', note: 'To put it mildly — смягчённая оценка.', example: { en: 'He was upset, to put it mildly.', ru: 'Он был расстроен, мягко говоря.' } },
+    { phrase: 'push back on that', ru: 'не согласиться, возразить', note: 'Push back — аргументированно возразить.' },
+    { phrase: 'the whole point', ru: 'в этом вся суть', note: 'Главная идея.' },
+    { phrase: 'borders on', ru: 'граничит с', note: 'Border on — почти является чем-то.', example: { en: 'His rudeness borders on hostility.', ru: 'Его грубость граничит с враждебностью.' } },
+    { phrase: 'smacks of', ru: 'попахивает, отдаёт', note: 'Smack of — иметь неприятный оттенок чего-то.' },
+    { phrase: 'plenty to chew on', ru: 'много пищи для размышлений', note: 'Food for thought в разговорной форме.' },
+  ],
+};
+
 export const READ_DIALOGUES: ReadDialogue[] = [
   morning,
   grocery,
@@ -262,6 +345,9 @@ export const READ_DIALOGUES: ReadDialogue[] = [
   officeKitchen,
   oldFriends,
   rentingCar,
+  salaryTalk,
+  studyAbroad,
+  bookClub,
 ];
 
 export const getDialogueById = (id: string): ReadDialogue | undefined =>

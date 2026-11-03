@@ -585,7 +585,229 @@ const film: SentencePack = {
   ],
 };
 
-export const SENTENCE_PACKS: SentencePack[] = [weather, morning, work, house, travel, film];
+const career: SentencePack = {
+  id: 'career-statement',
+  title: 'Цели в карьере',
+  level: 'B2',
+  skills: ['Инфинитивные обороты', 'Относительные придаточные', 'Уступка although', 'Причастный оборот в начале', 'Формальный стиль'],
+  grammarTopicIds: ['passive-reporting', 'conditionals-advanced'],
+  steps: [
+    {
+      en: 'I want a new job.',
+      ru: 'Я хочу новую работу.',
+      chunks: [
+        { text: 'I', role: 'subject' },
+        { text: 'want', role: 'predicate' },
+        { text: 'a new job', role: 'object' },
+      ],
+      accepts: ['I want a new job'],
+      grammarNote: 'База: want + дополнение. Самая простая формулировка цели.',
+    },
+    {
+      en: 'I really want a more challenging job.',
+      ru: 'Я правда хочу более сложную и интересную работу.',
+      chunks: [
+        { text: 'I', role: 'subject' },
+        { text: 'really', role: 'modifier', ru: 'правда, действительно' },
+        { text: 'want', role: 'predicate' },
+        { text: 'a more challenging job', role: 'object', ru: 'сравнительная степень + причастие-прилагательное' },
+      ],
+      accepts: ['I really want a more challenging job', 'I really want a more challenging job.'],
+      grammarNote: 'Детали: really усиливает want, more challenging — сравнительная степень прилагательного из причастия.',
+      diffNote: 'Добавлены интенсификатор и сравнение — формулировка точнее и эмоциональнее.',
+    },
+    {
+      en: 'I want a job that challenges me and lets me grow.',
+      ru: 'Я хочу работу, которая бросает мне вызов и позволяет расти.',
+      chunks: [
+        { text: 'I want a job', role: 'clause' },
+        { text: 'that', role: 'connector', ru: 'относительное местоимение' },
+        { text: 'challenges me', role: 'predicate' },
+        { text: 'and', role: 'connector' },
+        { text: 'lets me grow', role: 'predicate', ru: 'let + объект + инфинитив без to' },
+      ],
+      accepts: [
+        'I want a job that challenges me and lets me grow',
+        'I want a job which challenges me and lets me grow',
+        'I want a job that challenges me and allows me to grow',
+      ],
+      grammarNote: 'Соединение: относительное придаточное that + два сказуемых через and. После let инфинитив без to.',
+      diffNote: 'Описание работы стало полноценным придаточным — предложение информативнее.',
+    },
+    {
+      en: 'Although I enjoy my current role, I am looking for a position that offers more responsibility.',
+      ru: 'Хотя мне нравится моя нынешняя роль, я ищу должность, которая даёт больше ответственности.',
+      chunks: [
+        { text: 'Although I enjoy my current role,', role: 'clause', ru: 'уступка' },
+        { text: 'I', role: 'subject' },
+        { text: 'am looking for', role: 'predicate', ru: 'фразовый глагол look for' },
+        { text: 'a position', role: 'object' },
+        { text: 'that offers more responsibility', role: 'clause', ru: 'относительное придаточное' },
+      ],
+      accepts: [
+        'Although I enjoy my current role, I am looking for a position that offers more responsibility',
+        'I am looking for a position that offers more responsibility although I enjoy my current role',
+        'Although I like my current role, I am looking for a position that offers more responsibility',
+      ],
+      grammarNote: 'Зависимые части: although + look for + вложенное относительное придаточное. Типичная структура мотивационного письма.',
+      diffNote: 'Появилась уступка и вложенная конструкция — стиль стал формальным.',
+    },
+    {
+      en: 'Having spent five years in sales, I am now seeking a role that would allow me to develop my leadership skills further.',
+      ru: 'Проработав пять лет в продажах, я теперь ищу роль, которая позволила бы мне дальше развить лидерские навыки.',
+      chunks: [
+        { text: 'Having spent five years in sales,', role: 'clause', ru: 'причастный оборот совершенного вида' },
+        { text: 'I', role: 'subject' },
+        { text: 'am now seeking', role: 'predicate', ru: 'seek = формальное «искать»' },
+        { text: 'a role', role: 'object' },
+        { text: 'that would allow me to develop my leadership skills further', role: 'clause' },
+      ],
+      accepts: [
+        'Having spent five years in sales, I am now seeking a role that would allow me to develop my leadership skills further',
+        'Having spent five years in sales, I am now looking for a role that would allow me to develop my leadership skills further',
+      ],
+      grammarNote: 'Продвинутая речь: причастный оборот Having done заменяет целое предложение «После того как я проработал…». Seek — формальный синоним look for.',
+      diffNote: 'Уступка заменена причастным оборотом, лексика формальная (seeking, would allow) — уровень мотивационного письма.',
+    },
+  ],
+  compose: {
+    prompt: 'Составьте своё предложение по модели: «Причастный оборот (Having/Being), я ищу/хочу …, который позволит…» — о работе или учёбе.',
+    mustContain: ['having', 'role|position|job', 'allow|develop'],
+    samples: [
+      'Having studied English for three years, I am now seeking a position that would allow me to use it daily',
+      'Having worked in a small team, I want a job that would let me lead projects',
+    ],
+  },
+  remedial: [
+    {
+      tag: 'word-order',
+      title: 'Причастный оборот в начале',
+      items: [
+        { ru: 'Проработав год здесь, я многому научился.', answers: ['Having worked here for a year, I learned a lot', 'Having worked here for a year, I have learned a lot'] },
+        { ru: 'Закончив школу, она поступила в университет.', answers: ['Having finished school, she entered university', 'Having finished school, she went to university'] },
+      ],
+    },
+    {
+      tag: 'verb-form',
+      title: 'let и allow: инфинитив',
+      items: [
+        { ru: 'Эта работа позволяет мне расти.', answers: ['This job lets me grow', 'This job allows me to grow'] },
+        { ru: 'Она позволила мне уйти раньше.', answers: ['She let me leave earlier', 'She allowed me to leave earlier'] },
+      ],
+    },
+  ],
+};
+
+const education: SentencePack = {
+  id: 'online-learning',
+  title: 'Мнение об онлайн-обучении',
+  level: 'C1',
+  skills: ['Выражение мнения', 'Уступка while/whereas', 'Инверсия not only', 'Тире-уточнение', 'Аргументированный стиль эссе'],
+  grammarTopicIds: ['inversion-emphasis', 'subjunctive-wish'],
+  steps: [
+    {
+      en: 'Online learning works.',
+      ru: 'Онлайн-обучение работает.',
+      chunks: [
+        { text: 'Online learning', role: 'subject' },
+        { text: 'works', role: 'predicate' },
+      ],
+      accepts: ['Online learning works', 'E-learning works'],
+      grammarNote: 'База: короткое утверждение. Такое предложение — тезис, но звучит слишком голо.',
+    },
+    {
+      en: 'Online learning works well for many students.',
+      ru: 'Онлайн-обучение хорошо работает для многих студентов.',
+      chunks: [
+        { text: 'Online learning', role: 'subject' },
+        { text: 'works well', role: 'predicate' },
+        { text: 'for many students', role: 'adverbial', ru: 'для многих студентов' },
+      ],
+      accepts: ['Online learning works well for many students', 'Online learning works for many students'],
+      grammarNote: 'Детали: well усиливает works, for-фраза определяет адресата.',
+      diffNote: 'Тезис уточнён: для кого работает и насколько хорошо.',
+    },
+    {
+      en: 'Online learning works well, but it cannot replace real classrooms.',
+      ru: 'Онлайн-обучение работает хорошо, но не может заменить настоящие классы.',
+      chunks: [
+        { text: 'Online learning works well,', role: 'clause' },
+        { text: 'but', role: 'connector' },
+        { text: 'it', role: 'subject' },
+        { text: 'cannot replace', role: 'predicate', ru: 'модальный cannot + инфинитив' },
+        { text: 'real classrooms', role: 'object' },
+      ],
+      accepts: [
+        'Online learning works well, but it cannot replace real classrooms',
+        'Online learning works well but it cannot replace real classrooms',
+        'Online learning works well, but it can not replace real classrooms',
+      ],
+      grammarNote: 'Соединение: but + модальный глагол cannot (пишется слитно!). Появляется контраргумент.',
+      diffNote: 'Односторонний тезис → сбалансированное утверждение с противопоставлением.',
+    },
+    {
+      en: 'While online learning offers flexibility, it cannot fully replace the social experience of a real classroom.',
+      ru: 'Хотя онлайн-обучение даёт гибкость, оно не может полностью заменить социальный опыт настоящего класса.',
+      chunks: [
+        { text: 'While online learning offers flexibility,', role: 'clause', ru: 'уступка с while' },
+        { text: 'it', role: 'subject' },
+        { text: 'cannot fully replace', role: 'predicate', ru: 'fully — позиция между модальным и глаголом' },
+        { text: 'the social experience of a real classroom', role: 'object' },
+      ],
+      accepts: [
+        'While online learning offers flexibility, it cannot fully replace the social experience of a real classroom',
+        'While online learning offers flexibility it cannot fully replace the social experience of a real classroom',
+        'Although online learning offers flexibility, it cannot fully replace the social experience of a real classroom',
+      ],
+      grammarNote: 'Зависимые части: while здесь = although (уступка, не «пока»). Наречие fully стоит между cannot и replace.',
+      diffNote: 'but заменён придаточной уступки while — стиль эссе, мысль глубже.',
+    },
+    {
+      en: 'Not only does online learning offer remarkable flexibility, but it also allows students to revisit complex material at their own pace — something a traditional classroom can rarely provide.',
+      ru: 'Онлайн-обучение не только даёт замечательную гибкость, но и позволяет студентам возвращаться к сложному материалу в своём темпе — то, что традиционный класс редко может дать.',
+      chunks: [
+        { text: 'Not only does online learning offer remarkable flexibility,', role: 'clause', ru: 'инверсия not only + does' },
+        { text: 'but it also allows students to revisit complex material', role: 'clause', ru: 'but also' },
+        { text: 'at their own pace', role: 'adverbial', ru: 'в своём темпе' },
+        { text: '— something a traditional classroom can rarely provide', role: 'clause', ru: 'уточнение через тире' },
+      ],
+      accepts: [
+        'Not only does online learning offer remarkable flexibility, but it also allows students to revisit complex material at their own pace',
+        'Not only does online learning offer flexibility, but it also allows students to revisit complex material at their own pace',
+      ],
+      grammarNote: 'Продвинутая речь: инверсия Not only + does + подлежащее, пара not only…but also, тире-уточнение. Уровень C1 эссе.',
+      diffNote: 'Конструкция not only…but also с инверсией плюс уточнение — предложение экспертного уровня.',
+    },
+  ],
+  compose: {
+    prompt: 'Составьте своё предложение по модели «Not only … but also …» с инверсией — о любом преимуществе технологий или учёбы.',
+    mustContain: ['not only', 'but'],
+    samples: [
+      'Not only does reading improve vocabulary, but it also reduces stress',
+      'Not only do video calls save time, but they also connect families across the world',
+    ],
+  },
+  remedial: [
+    {
+      tag: 'word-order',
+      title: 'Инверсия после not only',
+      items: [
+        { ru: 'Он не только умный, но и добрый.', answers: ['Not only is he smart, but he is also kind', 'Not only is he smart but he is also kind'] },
+        { ru: 'Она не только поёт, но и пишет песни.', answers: ['Not only does she sing, but she also writes songs', 'Not only does she sing but she also writes songs'] },
+      ],
+    },
+    {
+      tag: 'verb-form',
+      title: 'Модальные + наречия',
+      items: [
+        { ru: 'Это не может полностью заменить практику.', answers: ['It cannot fully replace practice', 'This cannot fully replace practice'] },
+        { ru: 'Студенты могут легко найти информацию.', answers: ['Students can easily find information', 'Students can easily find the information'] },
+      ],
+    },
+  ],
+};
+
+export const SENTENCE_PACKS: SentencePack[] = [weather, morning, work, house, travel, film, career, education];
 
 export const getPackById = (id: string): SentencePack | undefined =>
   SENTENCE_PACKS.find((p) => p.id === id);

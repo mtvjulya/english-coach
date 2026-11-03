@@ -582,7 +582,206 @@ export const phoneCall: Scenario = {
   ],
 };
 
-export const SCENARIOS: Scenario[] = [smallTalk, shoppingReturns, restaurant, phoneCall, atDoctor, jobInterview];
+export const negotiation: Scenario = {
+  id: 'negotiation',
+  title: 'Переговоры о сроках и бюджете',
+  description: 'Обсуждаем с менеджером проекта сдвиг дедлайна и договариваемся об условиях.',
+  level: 'B2',
+  roles: { ai: 'менеджер проекта', user: 'исполнитель' },
+  listening: [
+    { en: 'Thanks for coming. So, about the Henderson project — where do we stand?', ru: 'Спасибо, что пришли. Итак, проект Хендерсона — на каком мы этапе?' },
+    { en: "We're on track with the design, but the testing phase is taking longer than expected.", ru: 'С дизайном всё по плану, но тестирование занимает больше времени, чем ожидалось.' },
+    { en: 'I see. Can we still deliver by the fifteenth?', ru: 'Понятно. Сможем ли сдать к пятнадцатому?' },
+    { en: "Realistically, no. I'd need at least another week — or extra help.", ru: 'Реалистично — нет. Мне нужна ещё минимум неделя, либо дополнительная помощь.' },
+    { en: 'Adding people is tricky budget-wise. What if we extend to the twenty-second?', ru: 'Добавить людей сложно из-за бюджета. А если продлить до двадцать второго?' },
+    { en: 'That would work if we cut the extra features for now.', ru: 'Это сработает, если пока убрать дополнительные функции.' },
+    { en: "Deal. I'll inform the client. Let's touch base on Friday.", ru: 'Договорились. Сообщу клиенту. Созвонимся в пятницу.' },
+  ],
+  comprehension: [
+    {
+      question: 'В чём проблема проекта?',
+      options: ['дизайн не готов', 'тестирование затянулось', 'клиент отказался', 'кончился бюджет'],
+      correct: 1,
+      explanation: '«the testing phase is taking longer than expected» — тестирование занимает больше времени.',
+    },
+    {
+      question: 'Что предлагает исполнитель?',
+      options: ['ещё неделю или помощь', 'отмену проекта', 'новый бюджет', 'смену клиента'],
+      correct: 0,
+      explanation: '«I’d need at least another week — or extra help».',
+    },
+    {
+      question: 'На чём договорились?',
+      options: ['сдать к 15-му', 'добавить людей', 'продлить до 22-го без доп. функций', 'встретиться завтра'],
+      correct: 2,
+      explanation: '«extend to the twenty-second» + «cut the extra features».',
+    },
+  ],
+  script: [
+    {
+      ai: "Let's discuss the Miller account. How is your side of the project going?",
+      aiRu: 'Давайте обсудим проект Миллера. Как продвигается ваша часть?',
+      hints: ['Опишите состояние: It is going well, but… / We are on track except… / We have a problem with…'],
+      expect: ['going', 'track', 'but', 'problem', 'delay'],
+      next: 1,
+      better: ['We are mostly on track, but the last stage is taking longer than planned.'],
+    },
+    {
+      ai: 'I see. The client expects delivery by the tenth. Is that realistic?',
+      aiRu: 'Понятно. Клиент ждёт сдачу к десятому. Это реалистично?',
+      hints: ['Честная оценка: To be honest… / Realistically… / I am afraid not… / That will be difficult because…'],
+      expect: ['honest', 'realistic', 'afraid', 'difficult', 'not', 'impossible'],
+      branches: [
+        { match: ['yes', 'realistic', 'can', 'possible'], goto: 3 },
+        { match: ['not', 'no', 'afraid', 'difficult', 'impossible'], goto: 2 },
+      ],
+      next: 2,
+      better: ['To be honest, it is going to be tight. We would need two more days.'],
+    },
+    {
+      ai: 'What would help you meet the deadline — more time or more resources?',
+      aiRu: 'Что поможет уложиться в срок — больше времени или ресурсов?',
+      hints: ['Предложите: It would help if… / Could we… / What if we… / I would need…'],
+      expect: ['need', 'help', 'could', 'would', 'extra', 'more'],
+      next: 4,
+      better: ['It would help a lot if we could get one more tester this week.'],
+    },
+    {
+      ai: 'Great to hear. And what about the budget — are we within limits?',
+      aiRu: 'Рад слышать. А что с бюджетом — укладываемся?',
+      hints: ['Про бюджет: We are within budget… / It is slightly over… / I will need to check…'],
+      expect: ['budget', 'within', 'over', 'check', 'fine'],
+      next: 4,
+      better: ['We are slightly over budget on materials, but nothing critical.'],
+    },
+    {
+      ai: "Fair enough. Let's agree: new deadline the seventeenth, no extra budget. Deal?",
+      aiRu: 'Хорошо. Договоримся: новый срок — семнадцатое, без доп. бюджета. По рукам?',
+      hints: ['Согласитесь или уточните: Deal. / That works for me. / Agreed, if… / I can accept that.'],
+      expect: ['deal', 'agree', 'works', 'accept', 'ok', 'fine'],
+      next: 5,
+      better: ['That works for me, as long as we drop the optional features.'],
+    },
+    {
+      ai: "Perfect. I'll email the client. Thanks for the honest update — talk Friday!",
+      aiRu: 'Отлично. Напишу клиенту. Спасибо за честный апдейт — до пятницы!',
+      hints: ['Завершите вежливо: Thanks, talk soon! / Sounds good, bye! / Looking forward to it.'],
+      expect: ['thanks', 'bye', 'talk', 'soon', 'good'],
+      next: undefined,
+      better: ['Thanks for understanding. Talk to you on Friday!'],
+    },
+  ],
+  monologue: [
+    'Представьте, что вы просите руководителя перенести дедлайн: объясните причину и предложите решение (60–90 сек).',
+    'Расскажите о ситуации, когда вам пришлось договариваться об условиях: что просили и чего достигли (60–90 сек).',
+  ],
+};
+
+export const debate: Scenario = {
+  id: 'opinion-debate',
+  title: 'Дискуссия: удалённая работа',
+  description: 'Спорим о плюсах и минусах удалёнки: выражаем мнение, соглашаемся и возражаем.',
+  level: 'C1',
+  roles: { ai: 'коллега с противоположным мнением', user: 'участник дискуссии' },
+  listening: [
+    { en: 'So, do you think remote work should stay for good?', ru: 'Как думаешь, удалённая работа должна остаться навсегда?' },
+    { en: 'Honestly, I have mixed feelings. It is great for focus, but teams lose their spark.', ru: 'Честно, у меня смешанные чувства. Для концентрации — отлично, но команды теряют искру.' },
+    { en: 'I would argue the opposite — people are happier, so they work better.', ru: 'Я бы сказал наоборот — люди счастливее, значит работают лучше.' },
+    { en: 'That is true to some extent, but juniors really struggle without mentorship.', ru: 'Отчасти верно, но новичкам без наставничества очень тяжело.' },
+    { en: 'Fair point. Still, companies save a fortune on offices.', ru: 'Справедливо. Но компании экономят состояние на офисах.' },
+    { en: 'Granted, though hybrid seems like a reasonable middle ground.', ru: 'Согласна, хотя гибрид выглядит разумным компромиссом.' },
+    { en: 'Now that is something I can get behind.', ru: 'Вот это я могу поддержать.' },
+  ],
+  comprehension: [
+    {
+      question: 'Что теряют команды на удалёнке, по словам первого спикера?',
+      options: ['деньги', '«искру», командный дух', 'клиентов', 'время'],
+      correct: 1,
+      explanation: '«teams lose their spark» — теряют командный дух.',
+    },
+    {
+      question: 'Кто страдает больше всех без наставничества?',
+      options: ['менеджеры', 'новички (juniors)', 'клиенты', 'бухгалтерия'],
+      correct: 1,
+      explanation: '«juniors really struggle without mentorship».',
+    },
+    {
+      question: 'На каком компромиссе сошлись?',
+      options: ['полный офис', 'полная удалёнка', 'гибридный формат', 'четырёхдневка'],
+      correct: 2,
+      explanation: '«hybrid seems like a reasonable middle ground» — гибрид.',
+    },
+  ],
+  script: [
+    {
+      ai: 'Here is a hot topic: should companies force everyone back to the office? What is your take?',
+      aiRu: 'Горячая тема: должны ли компании вернуть всех в офис? Ваше мнение?',
+      hints: ['Выразите мнение: In my view… / I strongly believe… / The way I see it… / I am convinced that…'],
+      expect: ['think', 'believe', 'view', 'opinion', 'should'],
+      next: 1,
+      better: ['In my view, forcing everyone back is a step backwards — flexibility matters more.'],
+    },
+    {
+      ai: 'Interesting. But many managers say creativity dies without face-to-face contact. Do you buy that?',
+      aiRu: 'Интересно. Но многие менеджеры говорят, что креативность умирает без живого контакта. Согласны?',
+      hints: ['Согласитесь частично или возразите: I see the point, however… / I would argue… / That is debatable… / To some extent…'],
+      expect: ['point', 'however', 'but', 'argue', 'extent', 'debatable'],
+      branches: [
+        { match: ['agree', 'true', 'right', 'point'], goto: 2 },
+        { match: ['disagree', 'argue', 'however', 'but'], goto: 3 },
+      ],
+      next: 2,
+      better: ['I see where that comes from, but I would argue creativity depends on people, not places.'],
+    },
+    {
+      ai: 'Fair enough. So how would you keep the team spirit alive remotely?',
+      aiRu: 'Справедливо. Как тогда поддерживать командный дух на удалёнке?',
+      hints: ['Предложите меры: One way would be… / Companies could… / For instance…'],
+      expect: ['could', 'would', 'meet', 'online', 'team', 'events'],
+      next: 4,
+      better: ['Regular online rituals plus quarterly meetups would keep the spirit alive.'],
+    },
+    {
+      ai: 'I see your point. Still, working from home blurs the line between work and life, does it not?',
+      aiRu: 'Понимаю. Но работа из дома стирает границу между работой и жизнью, не так ли?',
+      hints: ['Ответьте нюансированно: Granted, but… / That is a fair concern, yet… / True, although…'],
+      expect: ['granted', 'true', 'fair', 'but', 'although', 'boundary'],
+      next: 4,
+      better: ['Granted, it does — which is why clear boundaries and set hours are essential.'],
+    },
+    {
+      ai: 'Last question — if you ran a company, what model would you choose: office, remote or hybrid?',
+      aiRu: 'Последний вопрос: будь вы руководителем, что выбрали бы — офис, удалёнку или гибрид?',
+      hints: ['Выбор + аргумент: I would go for… / My choice would be… because… / On balance…'],
+      expect: ['would', 'choose', 'hybrid', 'remote', 'office', 'because'],
+      next: 5,
+      better: ['On balance, I would go for hybrid — it captures the best of both worlds.'],
+    },
+    {
+      ai: 'You argued your case well — even if we disagree, it was a great discussion!',
+      aiRu: 'Вы хорошо аргументировали — даже если не согласны друг с другом, отличная дискуссия!',
+      hints: ['Завершите вежливо: Likewise! / Same here — good talk. / It was a pleasure discussing this.'],
+      expect: ['thanks', 'likewise', 'pleasure', 'good', 'discussion'],
+      next: undefined,
+      better: ['Likewise — a pleasure to exchange views. Let us do it again sometime!'],
+    },
+  ],
+  monologue: [
+    'Выскажите нюансированное мнение об удалённой работе: два аргумента за и одно «но» (60–90 сек).',
+    'Выберите спорную тему (соцсети, ИИ, одноразовый пластик) и обоснуйте свою позицию (60–90 сек).',
+  ],
+};
+
+export const SCENARIOS: Scenario[] = [
+  smallTalk,
+  shoppingReturns,
+  restaurant,
+  phoneCall,
+  atDoctor,
+  jobInterview,
+  negotiation,
+  debate,
+];
 
 export const getScenarioById = (id: string): Scenario | undefined =>
   SCENARIOS.find((s) => s.id === id);

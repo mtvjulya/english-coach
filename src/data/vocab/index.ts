@@ -1,6 +1,7 @@
-import type { VocabTheme, VocabWord } from '../../types';
+﻿import type { VocabTheme, VocabWord } from '../../types';
 import { everyday, work, family, shopping } from './themes1';
 import { travel, health, phrasal, expressions } from './themes2';
+import { academic, idioms, nuance } from './themes3';
 
 export const VOCAB_THEMES: VocabTheme[] = [
   everyday,
@@ -11,6 +12,9 @@ export const VOCAB_THEMES: VocabTheme[] = [
   health,
   phrasal,
   expressions,
+  academic,
+  idioms,
+  nuance,
 ];
 
 export const ALL_WORDS: VocabWord[] = VOCAB_THEMES.flatMap((t) => t.words);

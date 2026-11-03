@@ -6,7 +6,7 @@ import { Card, Tag, SectionTitle } from '../../components/ui';
 import { DIALOGUE_TOPIC_RU } from '../../types';
 import type { DialogueTopic, Level } from '../../types';
 
-const LEVELS: Level[] = ['A1', 'A2', 'B1', 'B2', 'C1'];
+const LEVELS: Level[] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 const TOPICS = Object.keys(DIALOGUE_TOPIC_RU) as DialogueTopic[];
 
 // длительность: короткие ≤1.5 мин, средние ≤3, длинные >3
