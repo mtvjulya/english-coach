@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import { DRILL_SECTIONS } from '../../data/trainer';
+import { APPENDICES } from '../../data/trainer/appendix';
 import { useApp } from '../../engine/storage';
-import { Card, Tag, ProgressBar } from '../../components/ui';
+import { Card, Tag, ProgressBar, SectionTitle } from '../../components/ui';
 
 export default function TrainerHub() {
   const s = useApp();
@@ -45,6 +46,23 @@ export default function TrainerHub() {
             </Link>
           );
         })}
+      </div>
+
+      <SectionTitle className="!mt-5">Приложения (справочник)</SectionTitle>
+      <div className="space-y-2">
+        {APPENDICES.map((a) => (
+          <Link key={a.id} to={`/trainer/appendix/${a.id}`}>
+            <Card className="!p-3.5 active:bg-slate-50">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="font-bold text-sm">{a.title}</div>
+                  <div className="text-xs text-slate-500">{a.intro}</div>
+                </div>
+                <span className="text-slate-300 text-lg">→</span>
+              </div>
+            </Card>
+          </Link>
+        ))}
       </div>
     </div>
   );

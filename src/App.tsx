@@ -22,6 +22,7 @@ import DialogueReader from './screens/dialogues/Reader';
 import TrainerHub from './screens/trainer/Hub';
 import TrainerSection from './screens/trainer/Section';
 import Drill from './screens/trainer/Drill';
+import TrainerAppendix from './screens/trainer/Appendix';
 import Mistakes from './screens/Mistakes';
 import Settings from './screens/Settings';
 
@@ -49,6 +50,7 @@ export default function App() {
         <Route path="/dialogues" element={<DialogueLibrary />} />
         <Route path="/dialogues/:dialogueId" element={<DialogueReader />} />
         <Route path="/trainer" element={<TrainerHub />} />
+        <Route path="/trainer/appendix/:appendixId" element={<TrainerAppendix />} />
         <Route path="/trainer/:sectionId" element={<TrainerSection />} />
         <Route path="/trainer/:sectionId/:exNum" element={<Drill />} />
         <Route path="/mistakes" element={<Mistakes />} />
