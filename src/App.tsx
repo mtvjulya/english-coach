@@ -19,6 +19,9 @@ import SentencesHub from './screens/sentences/Hub';
 import SentenceLesson from './screens/sentences/Lesson';
 import DialogueLibrary from './screens/dialogues/Library';
 import DialogueReader from './screens/dialogues/Reader';
+import TrainerHub from './screens/trainer/Hub';
+import TrainerSection from './screens/trainer/Section';
+import Drill from './screens/trainer/Drill';
 import Mistakes from './screens/Mistakes';
 import Settings from './screens/Settings';
 
@@ -45,6 +48,9 @@ export default function App() {
         <Route path="/sentences/:packId" element={<SentenceLesson />} />
         <Route path="/dialogues" element={<DialogueLibrary />} />
         <Route path="/dialogues/:dialogueId" element={<DialogueReader />} />
+        <Route path="/trainer" element={<TrainerHub />} />
+        <Route path="/trainer/:sectionId" element={<TrainerSection />} />
+        <Route path="/trainer/:sectionId/:exNum" element={<Drill />} />
         <Route path="/mistakes" element={<Mistakes />} />
         <Route path="/settings" element={<Settings />} />
       </Routes>

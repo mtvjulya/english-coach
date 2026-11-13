@@ -56,6 +56,7 @@ export interface AppState {
   speaking: Record<string, SpeakingProgress>;
   sentences: Record<string, SentenceProgress>;
   dialogues: Record<string, { opened: number; lastAt: number }>; // dialogueId → прогресс чтения
+  trainer: Record<string, { score: number; at: number }>; // 'sectionId#exNum' → лучший результат
   customWords: VocabWord[]; // личный словарь (выражения из диалогов)
   activity: Record<string, number>; // 'YYYY-MM-DD' → count
   lastLesson: { path: string; label: string } | null;
@@ -74,6 +75,7 @@ export interface AppState {
   saveSpeaking: (scenarioId: string, score: number) => void;
   saveSentence: (packId: string, score: number, maxStep: number, passScore: number) => void;
   touchDialogue: (dialogueId: string) => void;
+  saveTrainer: (key: string, score: number) => void;
   saveCustomWord: (w: VocabWord) => void;
   removeCustomWord: (wordId: string) => void;
   touchActivity: () => void;
@@ -107,6 +109,7 @@ export const useApp = create<AppState>()(
       speaking: {},
       sentences: {},
       dialogues: {},
+      trainer: {},
       customWords: [],
       activity: {},
       lastLesson: null,
@@ -218,6 +221,17 @@ export const useApp = create<AppState>()(
           return { customWords: s.customWords.filter((w) => w.id !== wordId), srs };
         }),
 
+      saveTrainer: (key, score) =>
+        set((s) => {
+          const p = s.trainer[key];
+          return {
+            trainer: {
+              ...s.trainer,
+              [key]: { score: Math.max(p?.score ?? 0, score), at: Date.now() },
+            },
+          };
+        }),
+
       touchActivity: () =>
         set((s) => {
           const key = new Date().toISOString().slice(0, 10);
@@ -242,6 +256,7 @@ export const useApp = create<AppState>()(
           speaking: {},
           sentences: {},
           dialogues: {},
+          trainer: {},
           customWords: [],
           activity: {},
           lastLesson: null,

@@ -1,4 +1,4 @@
-import type { GrammarTopic, ReadDialogue, Scenario, SentencePack, VocabTheme } from '../types';
+import type { DrillSection, GrammarTopic, ReadDialogue, Scenario, SentencePack, VocabTheme } from '../types';
 import type { AppState, TopicProgress } from './storage';
 import { getTopic, dueWords } from './storage';
 import { ERROR_TAG_RU } from '../types';
@@ -19,7 +19,8 @@ export function todayPlan(
   themes: VocabTheme[],
   scenarios: Scenario[],
   packs: SentencePack[] = [],
-  dialogues: ReadDialogue[] = []
+  dialogues: ReadDialogue[] = [],
+  drills: DrillSection[] = []
 ): PlanItem[] {
   const items: PlanItem[] = [];
 
@@ -106,6 +107,18 @@ export function todayPlan(
       title: `Диалог: ${dlg.title}`,
       subtitle: 'Читаем и слушаем',
       path: `/dialogues/${dlg.id}`,
+      done: false,
+    });
+  }
+
+  // 7. грамматический тренажёр
+  const drillSec = drills.find((sec) => sec.exercises.some((e) => !s.trainer[`${sec.id}#${e.num}`]));
+  if (drillSec) {
+    items.push({
+      id: `drill-${drillSec.id}`,
+      title: `Тренажёр: ${drillSec.title}`,
+      subtitle: 'Упражнения по возрастанию сложности',
+      path: `/trainer/${drillSec.id}`,
       done: false,
     });
   }

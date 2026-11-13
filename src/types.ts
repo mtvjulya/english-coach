@@ -274,6 +274,32 @@ export interface ReadDialogue {
   expressions: DialogueExpression[];
 }
 
+// ===== Модуль «Грамматический тренажёр» =====
+// Структура как в школьном тренажёре: раздел → правила → пронумерованные упражнения
+// по возрастанию сложности (вставьте пропуск, раскройте скобки, исправьте, перефразируйте).
+
+export interface DrillItem {
+  task: string; // предложение с ___ или исходная фраза для перестройки
+  answers: string[]; // допустимые ответы (пропуск или вся фраза целиком)
+  hint?: string; // подсказка (RU)
+}
+
+export interface DrillExercise {
+  num: number; // «Упражнение 1»
+  title: string; // инструкция, как в учебнике
+  items: DrillItem[];
+}
+
+export interface DrillSection {
+  id: string;
+  title: string; // название раздела
+  grades: string; // «5–6 кл.»
+  level: Level;
+  rules: string[]; // справочные правила перед упражнениями
+  errorTag: ErrorTag; // куда относить ошибки раздела
+  exercises: DrillExercise[];
+}
+
 // ===== Входной тест =====
 
 export interface PlacementItem {

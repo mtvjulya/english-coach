@@ -6,6 +6,7 @@ import { VOCAB_THEMES, ALL_WORDS } from '../data/vocab';
 import { SCENARIOS } from '../data/speaking/scenarios';
 import { SENTENCE_PACKS } from '../data/sentences';
 import { READ_DIALOGUES } from '../data/dialogues';
+import { DRILL_SECTIONS } from '../data/trainer';
 import { Card, Button, ProgressBar, StatCard, SectionTitle, Tag } from '../components/ui';
 import { ERROR_TAG_RU } from '../types';
 import { useEffect } from 'react';
@@ -27,8 +28,10 @@ export default function Home() {
   const speakingDone = Object.values(s.speaking).reduce((a, p) => a + p.attempts, 0);
   const sentencesDone = SENTENCE_PACKS.filter((p) => s.sentences[p.id]?.mastered).length;
   const dialoguesRead = READ_DIALOGUES.filter((d) => s.dialogues[d.id]).length;
+  const trainerDone = DRILL_SECTIONS.reduce((a, sec) => a + sec.exercises.filter((e) => s.trainer[`${sec.id}#${e.num}`]).length, 0);
+  const trainerTotal = DRILL_SECTIONS.reduce((a, sec) => a + sec.exercises.length, 0);
   const streak = streakDays(s.activity);
-  const plan = todayPlan(s, GRAMMAR_TOPICS, VOCAB_THEMES, SCENARIOS, SENTENCE_PACKS, READ_DIALOGUES);
+  const plan = todayPlan(s, GRAMMAR_TOPICS, VOCAB_THEMES, SCENARIOS, SENTENCE_PACKS, READ_DIALOGUES, DRILL_SECTIONS);
   const resume = resumeLesson(s, GRAMMAR_TOPICS);
   const recs = buildRecommendations(s, GRAMMAR_TOPICS);
   const topMistakes = mistakeStats(s.mistakes).slice(0, 3);
@@ -144,6 +147,13 @@ export default function Home() {
           <div className="text-xs font-bold mt-1">Диалоги</div>
           <div className="text-[10px] text-slate-400">
             {dialoguesRead}/{READ_DIALOGUES.length} прочитано
+          </div>
+        </Link>
+        <Link to="/trainer" className="bg-white rounded-2xl border border-slate-200 p-3 text-center active:bg-slate-50">
+          <div className="text-2xl">📋</div>
+          <div className="text-xs font-bold mt-1">Тренажёр</div>
+          <div className="text-[10px] text-slate-400">
+            {trainerDone}/{trainerTotal} упр.
           </div>
         </Link>
         <Link to="/vocab" className="bg-white rounded-2xl border border-slate-200 p-3 text-center active:bg-slate-50">

@@ -9,6 +9,7 @@ const tabs = [
   { to: '/speaking', icon: '🎙️', label: 'Разговор' },
   { to: '/sentences', icon: '🧩', label: 'Фразы' },
   { to: '/dialogues', icon: '💬', label: 'Диалоги' },
+  { to: '/trainer', icon: '📋', label: 'Тренажёр' },
 ];
 
 const TITLES: [RegExp, string][] = [
@@ -30,6 +31,9 @@ const TITLES: [RegExp, string][] = [
   [/^\/sentences/, 'Построение предложений'],
   [/^\/dialogues\/[^/]+/, 'Диалог: читаем и слушаем'],
   [/^\/dialogues/, 'Диалоги'],
+  [/^\/trainer\/[^/]+\/\d+/, 'Упражнение'],
+  [/^\/trainer\/[^/]+/, 'Раздел тренажёра'],
+  [/^\/trainer/, 'Грамматический тренажёр'],
   [/^\/mistakes/, 'Ошибки и рекомендации'],
   [/^\/settings/, 'Настройки'],
 ];
@@ -38,7 +42,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const ai = aiMode();
-  const topLevel = ['/', '/grammar', '/vocab', '/speaking', '/sentences', '/dialogues'].includes(pathname);
+  const topLevel = ['/', '/grammar', '/vocab', '/speaking', '/sentences', '/dialogues', '/trainer'].includes(pathname);
   const title = TITLES.find(([re]) => re.test(pathname))?.[1] ?? 'English Coach';
   return (
     <div className="mx-auto max-w-app min-h-dvh bg-slate-100 flex flex-col">
